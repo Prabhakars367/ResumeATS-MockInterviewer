@@ -40,7 +40,7 @@ def get_vector_store(text_chunks):
 def get_conversational_chain():
     prompt_template = """
     Given the extracted resume text and job description, evaluate the ATS (Applicant Tracking System) score based on industry standards.
-    Also, generate relevant interview questions related to the job role and HR questions based on the resume.
+    Also, generate relevant interview questions related to the job role and HR questions based on the resume.(ATS score should be higher font size and grab attention of the viewer)
     
     Resume Text:
     {context}
