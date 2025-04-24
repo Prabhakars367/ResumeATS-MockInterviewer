@@ -37,8 +37,7 @@ This project is a powerful resume analysis and mock interview application built 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/ai-resume-interview-assistant.git
-   cd ai-resume-interview-assistant
+   git clone https://github.com/Prabhakars367/ResumeATS-MockInterviewer
    ```
 
 2. **Install dependencies**
