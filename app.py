@@ -1,96 +1,127 @@
 import streamlit as st
-from PyPDF2 import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-import os
-from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
-import google.generativeai as genai
-from langchain.chains.question_answering import load_qa_chain
-from langchain.prompts import PromptTemplate
-from dotenv import load_dotenv
+import fitz  # PyMuPDF
+from model1 import get_ats_score, calculate_custom_ats_score
+from llm import get_technical_questions, get_hr_questions, evaluate_candidate_answers
 
-# Load environment variables
-load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    st.error("Google API Key is missing! Please set it in the environment variables.")
-genai.configure(api_key=GOOGLE_API_KEY)
+def extract_text_from_pdf(pdf_file):
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    return "\n".join([page.get_text("text") for page in doc])
 
-# Function to extract text from PDFs
-def get_pdf_text(pdf_docs):
-    text = ""
-    for pdf in pdf_docs:
-        pdf_reader = PdfReader(pdf)
-        for page in pdf_reader.pages:
-            text += page.extract_text() or ""
-    return text
+def parse_resume_sections(text):
+    sections = {"education_details": "", "experience_details": "", "skill": ""}
+    current_section = None
 
-# Function to split text into chunks
-def get_text_chunks(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
-    return text_splitter.split_text(text)
+    for line in text.split("\n"):
+        line = line.strip()
+        if not line:
+            continue
 
-# Function to create a FAISS vector store
-def get_vector_store(text_chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
-    vector_store.save_local("faiss_index")
+        header_check = line.upper()
+        if "EDUCATION" in header_check:
+            current_section = "education_details"
+        elif "EXPERIENCE" in header_check:
+            current_section = "experience_details"
+        elif "SKILL" in header_check or "TECHNICAL SKILLS" in header_check:
+            current_section = "skill"
+        elif current_section:
+            sections[current_section] += line + "\n"
 
-# Load the conversational QA chain
-def get_conversational_chain():
-    prompt_template = """
-    Given the extracted resume text and job description, evaluate the ATS (Applicant Tracking System) score based on industry standards.
-    Also, generate relevant interview questions related to the job role and HR questions based on the resume.(ATS score should be higher font size and grab attention of the viewer)
-    
-    Resume Text:
-    {context}
-    
-    Job Description:
-    {job_description}
-    
-    Generate:
-    - ATS Score (Out of 100)
-    - Relevant technical and HR questions for the interview.
-    """
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "job_description"])
-    return load_qa_chain(model, chain_type="stuff", prompt=prompt)
+    return sections
 
-# Function to process resume and get ATS score and questions
-def analyze_resume(resume_text, job_description):
-    try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-        docs = new_db.similarity_search(resume_text)
-        chain = get_conversational_chain()
-        response = chain({"input_documents": docs, "job_description": job_description}, return_only_outputs=True)
-        st.write("### ATS Score:", response["output_text"].split("\n")[0])
-        st.write("### Suggested Interview Questions:")
-        st.write("\n".join(response["output_text"].split("\n")[1:]))
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+# Streamlit UI
+st.set_page_config(page_title="AI Resume & Interview Assistant", layout="wide")
+st.title(" AI-Powered Resume & Interview Assistant")
+st.markdown("Get resume analysis + technical & HR mock interviews powered by Gemini")
 
-# Main Streamlit app
-def main():
-    st.set_page_config(page_title="Resume ATS & Interview Prep", layout="wide")
-    st.title("📄 Resume ATS Score & Interview Questions Generator")
-    
-    job_description = st.text_area("Enter the Job Description for Resume Evaluation:")
-    pdf_docs = st.file_uploader("Upload your Resume (PDF Format)", accept_multiple_files=False, type='pdf')
-    
-    if st.button("Analyze Resume"):
-        if pdf_docs and job_description:
-            with st.spinner("Processing your resume..."):
-                raw_text = get_pdf_text([pdf_docs])
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                analyze_resume(raw_text, job_description)
-                st.success("✅ Resume analysis completed!")
+uploaded_file = st.file_uploader(" Upload Resume (PDF)", type=["pdf"])
+job_description = st.text_area(" Optional Job Description", placeholder="Paste job requirements here...", height=150)
+
+if uploaded_file:
+    resume_text = extract_text_from_pdf(uploaded_file)
+    parsed_resume = parse_resume_sections(resume_text)
+
+    with st.expander(" Resume Breakdown", expanded=True):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("### 🎓 Education")
+            st.write(parsed_resume["education_details"] or "No education details found")
+        with col2:
+            st.write("###  Experience")
+            st.write(parsed_resume["experience_details"] or "No experience details found")
+
+        st.write("### 🛠️ Skills")
+        st.write(parsed_resume["skill"] or "No skills listed")
+
+    # Job Matching
+    if job_description.strip():
+        score = calculate_custom_ats_score(parsed_resume, job_description)
+        rounded_score = round(float(score["ats_score"]), 2)
+        st.subheader(" Custom Job Match")
+        st.metric(label="Relevance Score", value=f"{rounded_score}%")
+        role = "custom role"
+    else:
+        results = get_ats_score(parsed_resume)
+        best_job = results["matched_job"]
+        best_score = round(float(results["ats_score"]), 2)
+        st.subheader(" Top Job Match")
+        st.write(f"**Best Match:** `{best_job}` — **{best_score}% match**")
+        role = best_job
+
+    st.success("✅ Resume analysis complete!")
+
+    # Initialize session state
+    if "tech_questions" not in st.session_state:
+        st.session_state.tech_questions = get_technical_questions(role)
+        st.session_state.tech_answers = [""] * len(st.session_state.tech_questions)
+        st.session_state.tech_submitted = False
+        st.session_state.tech_feedback = ""
+
+    if "hr_questions" not in st.session_state:
+        st.session_state.hr_questions = get_hr_questions()
+        st.session_state.hr_answers = [""] * len(st.session_state.hr_questions)
+        st.session_state.hr_submitted = False
+        st.session_state.hr_feedback = ""
+
+    # Technical Round
+    st.divider()
+    with st.expander(" Mock Technical Interview", expanded=True):
+        if not st.session_state.tech_submitted:
+            for i, question in enumerate(st.session_state.tech_questions):
+                st.session_state.tech_answers[i] = st.text_area(
+                    f"Q{i+1}: {question}",
+                    key=f"tech_q{i}",
+                    value=st.session_state.tech_answers[i]
+                )
+
+            if st.button(" Submit Technical Answers"):
+                questions = st.session_state.tech_questions
+                answers = st.session_state.tech_answers
+                st.session_state.tech_feedback = evaluate_candidate_answers(questions, answers, round_type="technical")
+
+                st.session_state.tech_submitted = True
+                st.rerun()
         else:
-            st.warning("⚠️ Please upload a resume and enter a job description.")
-    
-    if st.button("Clear Data"):
-        st.experimental_rerun()
+            st.write("###  Technical Feedback")
+            st.markdown(st.session_state.tech_feedback)
 
-if __name__ == "__main__":
-    main()
+    # HR Round
+    st.divider()
+    with st.expander(" Mock HR Interview", expanded=True):
+        if not st.session_state.hr_submitted:
+            for i, question in enumerate(st.session_state.hr_questions):
+                st.session_state.hr_answers[i] = st.text_area(
+                    f"HR Q{i+1}: {question}",
+                    key=f"hr_q{i}",
+                    value=st.session_state.hr_answers[i]
+                )
+
+            if st.button(" Submit HR Answers"):
+                questions = st.session_state.hr_questions
+                answers = st.session_state.hr_answers
+                st.session_state.hr_feedback = evaluate_candidate_answers(questions, answers, round_type="hr")
+
+                st.session_state.hr_submitted = True
+                st.rerun()
+        else:
+            st.write("###  HR Feedback")
+            st.markdown(st.session_state.hr_feedback)
