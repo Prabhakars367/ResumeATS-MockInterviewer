@@ -1,105 +1,100 @@
-# AI Smart Interviewer
+# 🤖 ResumeATS-MockInterviewer: AI-Powered Career Intelligence
 
-A comprehensive AI-powered interview application designed to conduct technical interviews, analyze candidate responses, and monitor behavioral cues using computer vision.
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-31019/)
+[![TensorFlow 2.16](https://img.shields.io/badge/TensorFlow-2.16.1-orange.svg)](https://www.tensorflow.org/)
+[![Keras 3](https://img.shields.io/badge/Keras-3.3.3-red.svg)](https://keras.io/)
+[![Groq AI](https://img.shields.io/badge/LLM-Groq-green.svg)](https://groq.com/)
+
+A state-of-the-art AI recruitment platform that combines **Real-time Behavioral Analytics**, **Generative AI Interviewing**, and **Job Market Intelligence**. This system doesn't just ask questions—it perceives candidate confidence, analyzes facial micro-expressions, and aligns technical evaluations with live job market data.
+
+---
+
+## 🏛️ Deep System Architecture
+
+The system is built on a high-concurrency **FastAPI** backend, utilizing **Socket.IO** for low-latency full-duplex communication between the client's webcam and the ML analysis engine.
+
+### 1. LLM Evaluation Engine (Powered by Groq)
+We have migrated from traditional REST-based LLMs to **Groq's LPU™ Inference Engine**.
+- **Model**: `llama-3.3-70b-versatile` (Primary), `llama-3-8b-8192` (Fallback).
+- **Inference**: Sub-second latency for complex technical question generation and multi-dimensional answer evaluation.
+- **Logic**: The system dynamically constructs prompts based on the candidate's Resume (parsed via customized PDF/DOCX logic) and the targeted Job Role.
+
+### 2. Behavioral Perception System (CV)
+Designed using the latest **Keras 3** and **MediaPipe** stacks for millisecond-level precision.
+- **Emotion Recognition**: A Deep Convolutional Neural Network (CNN) trained on thousands of facial expressions, upgraded to run on **Keras 3** metadata for maximum performance. Detects **Happiness, Sadness, Anger, Neutrality, and Nervousness**.
+- **Eye Tracking**: Utilizes **MediaPipe Face Mesh (468 landmarks)** to calculate Gaze Direction and Blink Rate, providing a "Focus Score" to detectable distractions.
+- **Nervousness Index**: A proprietary algorithm combines facial symmetry, movement variance, and fear-indexed emotion probabilities to quantify candidate anxiety levels.
+
+### 3. Automated Job Intelligence
+Integrates a robust **Web Scraper** that monitors live job boards to ensure interview questions are relevant to current industry standards.
+- Synchronizes with a local **SQLite** database (`jobs.db`) to provide candidates with real-time career opportunities post-interview.
+
+---
 
 ## 🚀 Key Features
 
-*   **Intelligent Questioning**: Selects technical questions based on job roles (e.g., Python Developer, Data Scientist) or randomizes them.
-*   **Voice Interaction**: Uses Speech Recognition to listen to candidate answers and Text-to-Speech (TTS) to ask questions and provide feedback.
-*   **Response Analysis**:
-    *   **Content Matching**: Uses TF-IDF and Cosine Similarity to compare user answers with expected answers.
-    *   **Scoring**: Provides an immediate similarity score (0.0 - 1.0) and feedback (Excellent, Good, Fair, Needs Improvement).
-*   **Behavioral Monitoring**:
-    *   **Emotion Recognition**: Real-time facial emotion detection (Happy, Sad, Neutral, Fear, etc.) using a Deep Learning model (`emotion_recognition_model.h5`).
-    *   **Eye Tracking**: Tracks gaze direction (Center, Up, Down, Left, Right) to detect distractions or "looking away" events using MediaPipe Face Mesh.
-*   **Resume Screening**: Built-in resume parser (PDF/DOCX) to extract text and potentially evaluate candidate fit.
-*   **Web Interface**: Full-featured web application built with Flask and Socket.IO for real-time video processing.
-*   **Detailed Reporting**: Saves interview logs, emotion summaries, and eye-tracking data to JSON files for post-interview analysis.
+- **Dynamic Question Branching**: Adaptive technical and HR question flow.
+- **Real-time Feedback Loop**: Instant analysis of speech-to-text transcripts vs. expected semantic benchmarks.
+- **Automated Scorecards**: Comprehensive JSON-based reports combining behavioral metrics and technical accuracy.
+- **Modern Web Interface**: Glassmorphic UI with real-time video overlay and metric visualizations.
 
-## 🛠️ Technology Stack
+---
 
-*   **Backend**: Python, Flask, Flask-SocketIO
-*   **Computer Vision**: OpenCV, MediaPipe, TensorFlow/Keras
-*   **NLP & Analytics**: NLTK, Scikit-learn, Pandas, NumPy
-*   **Speech**: SpeechRecognition (Google/Vosk), PyDub
-*   **Frontend**: HTML, JavaScript (Socket.IO client)
+## 🛠️ Technical Stack
 
-## 📋 Prerequisites
+| Component | Technology |
+| :--- | :--- |
+| **Backend** | FastAPI, Socket.IO, Python 3.10 |
+| **LLM Gateway** | Groq SDK (LLama 3.1/3.3) |
+| **Deep Learning** | Keras 3, TensorFlow 2.16.1 |
+| **Computer Vision** | MediaPipe (Face Mesh), OpenCV |
+| **Database** | SQLite, SQLAlchemy |
+| **Natural Language** | TF-IDF, NLTK, Vosk/Google-SR |
 
-*   **Python 3.8+**
-*   **Visual Studio C++ Build Tools**: Required for compiling some Python packages like `dlib` or `pyaudio` (if used).
-*   **Webcam**: Required for emotion and eye tracking.
-*   **Microphone**: Required for voice interaction.
+---
 
-## 📦 Installation
+## 📦 Environment Setup
 
-1.  **Clone the repository** (if applicable):
-    ```bash
-    git clone <repository-url>
-    cd emotion_rec
-    ```
+### Prerequisites
+- **Conda** (Recommended for ML dependency management)
+- **Groq API Key** (Added to `.env`)
 
-2.  **Create a Virtual Environment** (Recommended):
-    ```bash
-    python -m venv venv
-    # Windows
-    .\venv\Scripts\activate
-    # macOS/Linux
-    source venv/bin/activate
-    ```
+### Installation
+1. **Clone and Enter**:
+   ```bash
+   git clone https://github.com/Prabhakars367/ResumeATS-MockInterviewer.git
+   cd ResumeATS-MockInterviewer
+   ```
 
-3.  **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+2. **Environment Configuration**:
+   Create a `.env` file in the root directory:
+   ```env
+   GROQ_API_KEY=your_key_here
+   ```
 
-    *Note: If you encounter issues with `pyaudio`, you may need to install the pre-compiled wheel files for your specific Python version.*
+3. **Install Core ML Stack**:
+   ```bash
+   conda create -n ai_in python=3.10
+   conda activate ai_in
+   pip install -r requirements.txt
+   ```
 
-4.  **Download NLTK Data**:
-    The application will attempt to download necessary NLTK data (`punkt`, `stopwords`) automatically on first run.
+---
 
-## 🏃 Usage
+## 🏃 Running the Application
 
-### Option 1: Web Application (Recommended)
-This runs the full interactive web interface.
+Start the production-ready server:
+```bash
+python app.py
+```
+Access the dashboard at `http://127.0.0.1:5000`.
 
-1.  Run the Flask application:
-    ```bash
-    python app.py
-    ```
-2.  Open your browser and navigate to:
-    `http://127.0.0.1:5000` or `http://localhost:5000`
-3.  Grant permissions for Camera and Microphone when prompted.
+---
 
-### Option 2: Standalone Script
-For a CLI-based interview experience with a CV2 window:
+## 🔧 Environment Stabilization Notes
+The project is pinned to **TensorFlow 2.16.1** and **Keras 3.3.3**. This specific configuration is required to support both the custom **Emotion Recognition Model** and **MediaPipe** landmarks simultaneously. **Protobuf 4.25.3** is enforced to prevent version conflicts common in modern ML pipelines.
 
-1.  Run the main script:
-    ```bash
-    python main.py
-    ```
-2.  Follow the voice/text prompts to select a job role.
-3.  Speak your answers clearly when prompted.
-4.  Press 'q' to quit the camera window if needed.
-
-## 📂 Project Structure
-
-*   `app.py`: Main Flask application entry point. Handles routes, Socket.IO events, and the web-based interview logic.
-*   `main.py`: Standalone Python script for running the interview process locally without a web browser.
-*   `eye_tracking.py`: Module for gaze estimation and eye tracking using MediaPipe.
-*   `face_emotion_system.py`: Module handling the emotion recognition model and video stream processing.
-*   `voice_rec.py`: Handles Speech-to-Text and Text-to-Speech functionality.
-*   `models/`: Directory for storing models (e.g., Vosk language model).
-*   `templates/`: HTML templates for the Flask app (`index.html`, `interview.html`).
-*   `final_cleaned.csv` / `final_csv.csv`: Dataset containing technical interview questions and answers.
-*   `requirements.txt`: List of Python dependencies.
-
-## 🔧 Troubleshooting
-
-*   **ffmpeg not found**: Ensure `ffmpeg` is installed and added to your system PATH if using local audio processing features.
-*   **Vosk Model**: If using offline speech recognition, ensure the Vosk model is extracted to `models/vosk-small-en-us-0.15`.
-*   **Camera Error**: Ensure no other application is using the webcam.
+---
 
 ## 📄 License
-
-[Include License Information Here]
+[MIT License](LICENSE) - See LICENSE file for details.
