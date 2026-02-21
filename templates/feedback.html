@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Candidate Feedback — AI Interview Pro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#f6f9ff;
+      --card:#ffffff;
+      --muted:#64748b;
+      --text:#0f172a;
+      --accent1:#6D28D9;
+      --accent2:#06B6D4;
+      --shadow:0 6px 20px rgba(15,23,42,0.06);
+      --radius:14px;
+    }
+
+    * { box-sizing: border-box; max-width: 100%; }
+    html, body { margin: 0; padding: 0; background: var(--bg); font-family: Inter, sans-serif; color: var(--text); }
+    header.top { max-width: 1100px; margin: 0 auto; padding: 20px; display:flex; justify-content:space-between; align-items:center; }
+    .brand { display:flex; gap:12px; align-items:center; }
+    .logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,var(--accent2),var(--accent1)); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; }
+    .ctas { display:flex; gap:12px; }
+    .cta-primary { background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; border-radius:10px; padding:10px 16px; text-decoration:none; font-weight:600; }
+    .cta-secondary { background:transparent; border:1px solid rgba(0,0,0,0.08); color:var(--accent1); padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:600; }
+
+    main.container { max-width:1100px; margin:20px auto 60px; padding:0 20px; }
+    .hero { background:var(--card); padding:22px; border-radius:var(--radius); box-shadow:var(--shadow); display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .hero-stats { display:flex; gap:12px; }
+    .stat-card { background:white; padding:14px 20px; border-radius:12px; min-width:120px; box-shadow:var(--shadow); text-align:center; }
+    .num { font-size:20px; font-weight:800; }
+
+    .grid { display:grid; grid-template-columns: minmax(0,1fr) 320px; gap:20px; margin-top:20px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .card { background:white; padding:18px; border-radius:12px; box-shadow:var(--shadow); margin-bottom:14px; overflow-x:hidden; }
+    .muted { color:var(--muted); }
+    .two-col { display:flex; gap:16px; align-items:flex-start; }
+    .qa-list { list-style:none; padding:0; display:flex; flex-direction:column; gap:12px; }
+    .qa-item { background:#f8fbff; padding:12px; border-radius:10px; border:1px solid rgba(0,0,0,0.04); }
+
+    .per-q { display:flex; gap:12px; align-items:flex-start; }
+    .per-q .meta { min-width:140px; font-size:13px; color:var(--muted); }
+    .per-q .body { flex:1; }
+    .small { font-size:13px; color:var(--muted); }
+    .footer-cta { text-align:center; margin-top:20px; display:flex; justify-content:center; gap:12px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#f2f7ff; color:var(--muted); font-weight:600; font-size:12px; }
+    pre { white-space:pre-wrap; word-break:break-word; font-family:inherit; }
+  </style>
+</head>
+
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">AI</div>
+    <div>
+      <div style="font-weight:700;">AI Interview Pro</div>
+      <div class="muted" style="font-size:12px;">Candidate feedback</div>
+    </div>
+  </div>
+
+  <div class="ctas">
+    <a class="cta-secondary" href="/resume">Back to Resume</a>
+    <a class="cta-primary" href="/interview">Start New Interview</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <div style="flex:1; min-width:240px;">
+      <h2 style="margin:0;">Candidate Performance Report</h2>
+      <p class="muted" style="margin-top:6px;">Emotion, eye-tracking & answer analysis summary.</p>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="num">{{ report.emotion_summary.percent_nervous }}%</div>
+        <div class="muted" style="font-size:12px;">Nervous</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">{{ report.emotion_summary.percent_calm }}%</div>
+        <div class="muted" style="font-size:12px;">Calm</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">{{ report.eye_summary.avg_fixations }}</div>
+        <div class="muted" style="font-size:12px;">Fixations</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="left">
+
+      <div class="card">
+        <h3>Automated Summary</h3>
+        <p class="muted" style="white-space:pre-wrap;">{{ report.llm_summary }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Behavioral & Emotional Insights</h3>
+        <p class="muted" style="white-space:pre-wrap;">{{ report.paragraphs.confidence }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Eye Tracking</h3>
+        <div class="two-col">
+          <div>
+            <div class="muted">Looked away</div>
+            <div style="font-size:22px;font-weight:800;margin-top:6px;">{{ report.eye_summary.looked_away_pct }}%</div>
+            <div class="muted" style="margin-top:10px;">Frequent direction: <strong>{{ report.eye_summary.frequent_direction }}</strong></div>
+          </div>
+
+          <div style="flex:1; min-width:180px;">
+            <div class="chart">Gaze Chart</div>
+          </div>
+        </div>
+
+        <p class="muted" style="margin-top:12px; white-space:pre-wrap;">
+          {{ report.paragraphs.eye }}
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Per-question Feedback</h3>
+        <p class="muted small">Each answered question below includes the transcript, LLM feedback, and the aggregated emotion & eye summaries taken around the answer.</p>
+
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
+          {% if report.answer_summary.answers %}
+            {% for a in report.answer_summary.answers %}
+            <div class="qa-item">
+              <div class="per-q">
+                <div class="meta">
+                  <div class="small">
+                    {% if a.q_idx is not none %}
+                      Q{{ a.q_idx }}.
+                    {% else %}
+                      Q{{ loop.index }}.
+                    {% endif %}
+                  </div>
+                  <div class="pill" style="margin-top:8px;">Answered: {{ a.ts or "" }}</div>
+                </div>
+                <div class="body">
+                  <div style="font-weight:700;">{{ a.question or "Question" }}</div>
+                  <div class="muted small" style="margin-top:6px;">Transcript:</div>
+                  <div style="margin-top:6px;"><pre>{{ a.transcript }}</pre></div>
+
+                  <div class="muted small" style="margin-top:10px;">LLM Feedback:</div>
+                  <div style="margin-top:6px;"><pre>{{ a.feedback }}</pre></div>
+
+                  <div style="margin-top:10px; display:flex; gap:12px;">
+                    <div class="small">
+                      <div class="muted">Dominant emotion</div>
+                      <div style="font-weight:700;">
+                        {% if a.emotion and a.emotion.dominant %}
+                          {{ a.emotion.dominant }}
+                        {% else %}
+                          {{ report.emotion_summary.dominant }}
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="small">
+                      <div class="muted">Nervousness</div>
+                      <div style="font-weight:700;">
+                        {% if a.emotion and a.emotion.percent_nervous is not none %}
+                          {{ a.emotion.percent_nervous }}%
+                        {% else %}
+                          {{ report.emotion_summary.percent_nervous }}%
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="small">
+                      <div class="muted">Looked away</div>
+                      <div style="font-weight:700;">
+                        {% if a.eye and a.eye.looked_away_pct is not none %}
+                          {{ a.eye.looked_away_pct }}%
+                        {% else %}
+                          {{ report.eye_summary.looked_away_pct }}%
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="muted">No answered questions found in this report.</div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right">
+      <div class="card">
+        <h3>Final Feedback</h3>
+        <p class="muted" style="white-space:pre-wrap;">{{ report.llm_summary }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Quick Improvements</h3>
+        <p class="muted" style="white-space:pre-wrap;">{{ report.paragraphs.cocky }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Session Data</h3>
+        <p class="muted">Questions answered: <strong>{{ report.answer_summary.count }}</strong></p>
+        <p class="muted">Dominant emotion: <strong>{{ report.emotion_summary.dominant }}</strong></p>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="footer-cta">
+    <a class="cta-primary" href="/interview">Start new mock interview</a>
+    <a class="cta-secondary" href="/resume">Improve resume</a>
+  </div>
+
+</main>
+
+</body>
+</html>

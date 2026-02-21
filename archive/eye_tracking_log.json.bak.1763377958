@@ -1,0 +1,11 @@
+{
+  "eye_tracking_data": [
+    {
+      "timestamp": "2025-11-07T16:33:07.897985",
+      "gaze_y": 0.30416666666666664,
+      "left_ear": 1.4293575151370554,
+      "right_ear": 1.4708710135363803,
+      "looking_away": false
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+[
+  {
+    "timestamp": "2025-08-06T01:34:59.565371",
+    "questions_asked": [
+      {
+        "question_number": 1,
+        "job_role": "Data Scientist",
+        "question": "What is a SQL window function? Give an example.",
+        "expected_answer": "A window function performs a calculation across a set of rows related to the current row without collapsing them. Example: `RANK() OVER (PARTITION BY department ORDER BY salary DESC)` to rank employees within each department.",
+        "user_answer": "fashion across a set of rules related",
+        "similarity_score": 0.16027230525603708,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.02871214784681797,
+            "disgust": 0.0006219037459231913,
+            "fear": 0.09776153415441513,
+            "happy": 0.04306986927986145,
+            "sad": 0.6078096628189087,
+            "surprise": 0.00011634905968094245,
+            "neutral": 0.2219085693359375
+          },
+          "dominant_emotion": "sad",
+          "emotion_stability": 0.7896667122840881,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:35:58.525045"
+      }
+    ],
+    "responses": [],
+    "emotion_analysis": [],
+    "similarity_scores": [],
+    "overall_performance": {
+      "total_questions": 1,
+      "average_similarity_score": 0.16027230525603708,
+      "performance_grade": "Needs Improvement",
+      "average_confidence": 0.26497843861579895,
+      "average_nervousness": 0.7055711969733238,
+      "individual_scores": [
+        0.16027230525603708
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-08-06T01:39:43.120062",
+    "questions_asked": [
+      {
+        "question_number": 1,
+        "job_role": "Data Scientist",
+        "question": "What is the purpose of an activation function in a neural network?",
+        "expected_answer": "It introduces non-linearity into a neural network. Without it, a multi-layer network would just be a linear model. Common functions are ReLU, Sigmoid, and Softmax.",
+        "user_answer": "the neural network",
+        "similarity_score": 0.39594526324859475,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.08241276443004608,
+            "disgust": 0.005969512276351452,
+            "fear": 0.0227190051227808,
+            "happy": 0.05694625899195671,
+            "sad": 0.5421562194824219,
+            "surprise": 0.0001355382992187515,
+            "neutral": 0.2896606922149658
+          },
+          "dominant_emotion": "sad",
+          "emotion_stability": 0.7842409014701843,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:40:30.092166"
+      },
+      {
+        "question_number": 2,
+        "job_role": "Data Scientist",
+        "question": "You are given a dataset of customer transactions. How would you build a model to predict customer churn?",
+        "expected_answer": "1. Define churn. 2. Preprocess data and engineer features (recency, frequency, monetary value). 3. Choose a classification model (e.g., Logistic Regression, Random Forest). 4. Train the model and evaluate using metrics like F1-Score or AUC-ROC due to potential class imbalance. 5. Interpret and deploy.",
+        "user_answer": "Lena load",
+        "similarity_score": 0.0,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.060566551983356476,
+            "disgust": 8.112076102406718e-06,
+            "fear": 0.06140481308102608,
+            "happy": 2.84193465631688e-05,
+            "sad": 0.7813073992729187,
+            "surprise": 1.9452518529305962e-07,
+            "neutral": 0.09668450057506561
+          },
+          "dominant_emotion": "sad",
+          "emotion_stability": 0.7303270697593689,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:41:01.138950"
+      }
+    ],
+    "responses": [],
+    "emotion_analysis": [],
+    "similarity_scores": [],
+    "overall_performance": {
+      "total_questions": 2,
+      "average_similarity_score": 0.19797263162429737,
+      "performance_grade": "Needs Improvement",
+      "average_confidence": 0.22165993556427566,
+      "average_nervousness": 0.7037937184795737,
+      "individual_scores": [
+        0.39594526324859475,
+        0.0
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-08-06T01:50:47.454780",
+    "questions_asked": [
+      {
+        "question_number": 1,
+        "job_role": "Data Scientist",
+        "question": "What are Precision and Recall? When would you use one over the other?",
+        "expected_answer": "Precision = TP / (TP + FP). It's important when the cost of a false positive is high (e.g., spam filtering). Recall = TP / (TP + FN). It's important when the cost of a false negative is high (e.g., medical diagnosis).",
+        "user_answer": "Vivek ek number ka",
+        "similarity_score": 0.0,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.25648370385169983,
+            "disgust": 2.363251724091242e-06,
+            "fear": 0.0021863668225705624,
+            "happy": 0.02057795599102974,
+            "sad": 0.0028661407995969057,
+            "surprise": 0.002203118521720171,
+            "neutral": 0.7156803011894226
+          },
+          "dominant_emotion": "neutral",
+          "emotion_stability": 0.7107297778129578,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:51:34.638502"
+      },
+      {
+        "question_number": 2,
+        "job_role": "Data Scientist",
+        "question": "What is the difference between L1 and L2 regularization?",
+        "expected_answer": "Both are regularization techniques to prevent overfitting. L1 (Lasso) adds a penalty on the absolute value of coefficients and can shrink them to exactly zero, performing feature selection. L2 (Ridge) adds a penalty on the squared value and shrinks coefficients close to, but not exactly to, zero.",
+        "user_answer": "Khandwa Siddharth",
+        "similarity_score": 0.0,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.4688056409358978,
+            "disgust": 0.010836164467036724,
+            "fear": 0.04163859039545059,
+            "happy": 0.2743065655231476,
+            "sad": 0.06568346917629242,
+            "surprise": 0.0038953167386353016,
+            "neutral": 0.13483431935310364
+          },
+          "dominant_emotion": "angry",
+          "emotion_stability": 0.7602722644805908,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:51:54.249988"
+      }
+    ],
+    "responses": [],
+    "emotion_analysis": [],
+    "similarity_scores": [],
+    "overall_performance": {
+      "total_questions": 2,
+      "average_similarity_score": 0.0,
+      "performance_grade": "Needs Improvement",
+      "average_confidence": 0.5726995710283518,
+      "average_nervousness": 0.05618728359695524,
+      "individual_scores": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-08-06T01:57:35.197789",
+    "questions_asked": [
+      {
+        "question_number": 1,
+        "job_role": "Data Scientist",
+        "question": "What is A/B testing?",
+        "expected_answer": "A/B testing is a randomized experiment comparing two versions (A and B) of a feature to see which performs better on a key metric, with the difference evaluated for statistical significance.",
+        "user_answer": "hello hello hello",
+        "similarity_score": 0.0,
+        "emotion_analysis": {
+          "average_emotions": {
+            "angry": 0.28188496828079224,
+            "disgust": 0.00012444602907635272,
+            "fear": 0.014766179025173187,
+            "happy": 0.12828151881694794,
+            "sad": 0.5672785043716431,
+            "surprise": 0.0005616915877908468,
+            "neutral": 0.007102721370756626
+          },
+          "dominant_emotion": "sad",
+          "emotion_stability": 0.7192153930664062,
+          "total_frames_processed": 50
+        },
+        "timestamp": "2025-08-06T01:58:27.223216"
+      }
+    ],
+    "responses": [],
+    "emotion_analysis": [],
+    "similarity_scores": [],
+    "overall_performance": {
+      "total_questions": 1,
+      "average_similarity_score": 0.0,
+      "performance_grade": "Needs Improvement",
+      "average_confidence": 0.13538424018770456,
+      "average_nervousness": 0.5820446833968163,
+      "individual_scores": [
+        0.0
+      ]
+    }
+  }
+]

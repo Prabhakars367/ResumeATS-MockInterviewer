@@ -1,0 +1,40 @@
+# --- Web Framework (FastAPI) ---
+fastapi==0.115.0
+uvicorn==0.30.6
+python-socketio==5.11.0
+python-multipart==0.0.9
+
+# --- AI / ML / CV ---
+tensorflow==2.16.1
+keras==3.3.3
+mediapipe==0.10.11
+opencv-python==4.10.0.84
+numpy==1.26.4
+scipy==1.13.1
+
+# --- LLM / REST / Groq ---
+requests==2.32.3
+python-dotenv==1.0.1
+groq==0.16.0
+
+# --- Audio / Speech ---
+SpeechRecognition==3.10.1
+pydub==0.25.1
+imageio[ffmpeg]==2.36.0
+
+# --- Data utils ---
+pandas==2.2.3
+pymupdf>=1.24.0
+python-docx>=1.1.0
+faiss-cpu==1.8.0.post1
+sentence-transformers==3.0.1
+scikit-learn==1.5.1
+
+# --- Misc ---
+matplotlib==3.9.2
+protobuf==4.25.3
+uuid==1.30
+tqdm==4.66.5
+sqlalchemy==2.0.35
+beautifulsoup4==4.12.3
+tf-keras==2.16.0

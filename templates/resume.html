@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Resume Analysis — AI Interview Pro</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f4f8ff;
+      --card:#ffffff;
+      --accent1:#6EE7B7;
+      --accent2:#7C3AED;
+      --muted:#64748b;
+      --dark:#0f172a;
+      --shadow: 0 12px 40px rgba(2,6,23,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--dark);
+      background:linear-gradient(180deg,#f8fbff 0%, #eef6ff 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* NAV (same as index) */
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;max-width:1200px;margin:0 auto}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:44px;height:44px;border-radius:10px;
+      background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;
+      box-shadow:0 8px 30px rgba(124,58,237,0.12)
+    }
+    .nav .links{display:flex;gap:18px;align-items:center}
+    .nav a{color:var(--muted);text-decoration:none;font-weight:600}
+
+    /* page layout */
+    .page{max-width:1100px;margin:34px auto;padding:0 20px}
+    .breadcrumb{color:var(--muted);margin-bottom:10px;text-decoration:none;display:inline-block}
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    h1{margin:0 0 8px;font-size:28px}
+    .sub{color:var(--muted);margin-bottom:18px}
+
+    label{display:block;font-weight:700;margin-top:12px;margin-bottom:6px}
+    input[type=file], textarea, input[type=text]{
+      width:100%;padding:12px;border-radius:10px;border:1px solid #eef4ff;background:#fbfdff;font-size:14px;
+    }
+    textarea{min-height:140px;resize:vertical}
+
+    .controls{display:flex;align-items:center;gap:12px;margin-top:18px}
+    .btn{
+      padding:10px 16px;border-radius:999px;border:0;font-weight:700;cursor:pointer;
+      color:white;background:linear-gradient(90deg,var(--accent2),#06B6D4);box-shadow:0 8px 24px rgba(124,58,237,0.12)
+    }
+    .btn.ghost{background:transparent;color:var(--dark);border:1px solid #e6eef9}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* result */
+    .result{margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#f8fbff,#ffffff);border:1px solid #eef6ff}
+    .result .row{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+    .pill{background:#fff;padding:8px 12px;border-radius:999px;border:1px solid #eef6ff;font-weight:700}
+    pre{white-space:pre-wrap;margin:8px 0 0 0;font-family:Inter,system-ui,monospace;background:transparent;border:0;padding:0;color:var(--muted)}
+
+    footer{max-width:1100px;margin:28px auto 60px;text-align:center;color:var(--muted);font-size:13px}
+
+    @media (max-width:900px){
+      h1{font-size:24px}
+      .controls{flex-direction:column;align-items:flex-start}
+      .result .row{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">
+      <div class="logo">AI</div>
+      <div>
+        <div style="font-weight:800">AI Interview Pro</div>
+        <div style="font-size:12px;color:var(--muted)">Smart interview prep</div>
+      </div>
+    </div>
+
+    <div class="links">
+      <a href="/">Home</a>
+      <a href="/interview">Mock Interview</a>
+      <a class="btn ghost" href="/interview">Quick Start</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <a class="breadcrumb" href="/">&larr; Back to home</a>
+
+    <div class="card">
+      <h1>Resume Analysis</h1>
+      <p class="sub">Upload your resume and get an AI-driven ATS score, role matches and tailored optimization suggestions.</p>
+
+      <label for="resumeFile">Resume file (PDF / DOCX / TXT)</label>
+      <input id="resumeFile" type="file" accept=".pdf,.docx,.doc,.txt">
+
+      <label for="jobDesc">Optional: Job Description (paste)</label>
+      <textarea id="jobDesc" placeholder="Paste job description for custom match (optional)"></textarea>
+
+      <div class="controls">
+        <button id="submitBtn" class="btn">Analyze Resume</button>
+        <div id="status" class="muted">No file selected</div>
+      </div>
+
+      <div id="resultBox" class="result" style="display:none">
+        <div class="row">
+          <div>
+            <div style="font-size:13px;color:var(--muted)">Best match</div>
+            <div style="font-size:18px;font-weight:800" id="matchedRole">—</div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;color:var(--muted)">ATS score</div>
+            <div class="pill" id="score">—</div>
+          </div>
+
+          <div style="margin-left:auto">
+            <button id="startInterviewBtn" class="btn">Start mock interview for this role</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-size:13px;color:var(--muted)">Top matches</div>
+          <pre id="topMatches">—</pre>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>© <span id="year"></span> AI Interview Pro — Local ML models</footer>
+
+  <script>
+    document.getElementById('year').innerText = new Date().getFullYear();
+
+    const $ = id => document.getElementById(id);
+    function showStatus(text, isError=false){
+      $('status').innerText = text;
+      $('status').style.color = isError ? 'crimson' : '';
+    }
+
+    $('submitBtn').addEventListener('click', async () => {
+      const file = $('resumeFile').files[0];
+      const jd = $('jobDesc').value || '';
+      if (!file){ showStatus('Please choose a resume file first.', true); return; }
+
+      showStatus('Uploading and analyzing — please wait...');
+      $('resultBox').style.display = 'none';
+
+      try {
+        const fd = new FormData();
+        fd.append('resume', file);
+        fd.append('job_description', jd);
+
+        const res = await fetch('/evaluate_resume', { method: 'POST', body: fd });
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || 'Server error');
+        }
+        const data = await res.json();
+
+        $('matchedRole').innerText = data.matched_job || 'No match found';
+        $('score').innerText = (data.ats_score !== undefined ? data.ats_score : '0');
+        $('topMatches').innerText = (data.top_matches || []).map(m => `${m.name} — ${m.score}%`).join('\\n') || '—';
+        $('resultBox').style.display = 'block';
+        showStatus('Analysis complete.');
+
+        $('startInterviewBtn').onclick = () => {
+          const role = encodeURIComponent(data.matched_job || 'Software Engineer');
+          window.location.href = `/interview?role=${role}`;
+        };
+      } catch (err) {
+        console.error(err);
+        showStatus('Analysis failed. Check server logs.', true);
+      }
+    });
+  </script>
+</body>
+</html>

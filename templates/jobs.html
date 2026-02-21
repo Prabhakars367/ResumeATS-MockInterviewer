@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interviewer | Job Opportunities</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .job-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .job-card:hover {
+            transform: translateY(-4px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #6366f1;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white">
+                            AI</div>
+                        <span class="text-xl font-bold tracking-tight">AI Interviewer</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="/" class="text-slate-400 hover:text-white transition-colors">Home</a>
+                    <a href="/resume" class="text-slate-400 hover:text-white transition-colors">ATS Scan</a>
+                    <a href="/interview" class="text-slate-400 hover:text-white transition-colors">Mock Interview</a>
+                    <a href="/jobs" class="text-white border-b-2 border-indigo-500 pb-1">Jobs</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div class="max-w-2xl">
+                <h1 class="text-5xl font-extrabold tracking-tight mb-4">
+                    Find Your Next <span class="gradient-text">Big Opportunity</span>
+                </h1>
+                <p class="text-slate-400 text-lg">
+                    Hand-picked tech roles from India's fastest growing companies and global leaders.
+                </p>
+            </div>
+            <button id="refresh-btn"
+                class="btn-primary text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 disabled:opacity-50 flex items-center gap-2">
+                <svg id="refresh-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span id="refresh-text">Refresh Jobs</span>
+            </button>
+        </header>
+
+        <!-- Search and Filter -->
+        <div class="mb-10 flex flex-col gap-8">
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="search-input" placeholder="Search roles, companies, or technologies..."
+                    class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl px-4 py-5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all pl-12 text-lg">
+            </div>
+
+            <div class="flex flex-wrap gap-3 items-center">
+                <span class="text-sm font-semibold text-slate-500 mr-2 uppercase tracking-wider">Top Hubs:</span>
+                <button
+                    class="filter-chip active px-6 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm border border-indigo-500 bg-indigo-500/10 text-indigo-400"
+                    data-hub="all">All</button>
+                <button
+                    class="filter-chip px-6 py-2 rounded-xl text-sm font-semibold border border-white/5 bg-white/5 text-slate-400 transition-all hover:bg-white/10 hover:text-white"
+                    data-hub="bangalore">Bangalore</button>
+                <button
+                    class="filter-chip px-6 py-2 rounded-xl text-sm font-semibold border border-white/5 bg-white/5 text-slate-400 transition-all hover:bg-white/10 hover:text-white"
+                    data-hub="gurgaon">NCR</button>
+                <button
+                    class="filter-chip px-6 py-2 rounded-xl text-sm font-semibold border border-white/5 bg-white/5 text-slate-400 transition-all hover:bg-white/10 hover:text-white"
+                    data-hub="pune">Pune</button>
+                <button
+                    class="filter-chip px-6 py-2 rounded-xl text-sm font-semibold border border-white/5 bg-white/5 text-slate-400 transition-all hover:bg-white/10 hover:text-white"
+                    data-hub="remote">Remote</button>
+            </div>
+        </div>
+
+        <!-- Job Grid -->
+        <div id="job-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if not jobs %}
+            <div
+                class="col-span-full text-center py-20 bg-slate-900/30 rounded-3xl border border-dashed border-slate-700">
+                <div class="mb-4 flex justify-center">
+                    <svg class="w-16 h-16 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-300">No jobs indexed yet</h3>
+                <p class="text-slate-500 mt-2 mb-6">Click "Refresh Jobs" to fetch the latest listings from tech boards.
+                </p>
+            </div>
+            {% else %}
+            {% for job in jobs %}
+            <div class="job-card rounded-2xl p-8 flex flex-col h-full group" data-title="{{ job.job_title }}"
+                data-company="{{ job.company_name }}" data-location="{{ job.location }}">
+                <div class="flex justify-between items-start mb-6">
+                    <span
+                        class="bg-indigo-500/10 text-indigo-400 text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest border border-indigo-500/20">
+                        {{ job.company_name }}
+                    </span>
+                    <span class="text-slate-500 text-xs font-medium">
+                        {{ job.date_added.strftime('%b %d') }}
+                    </span>
+                </div>
+                <h3
+                    class="text-xl font-bold mb-4 line-clamp-2 leading-snug group-hover:text-indigo-400 transition-colors">
+                    {{ job.job_title }}
+                </h3>
+                <div class="flex items-center text-slate-400 text-sm mb-8">
+                    <svg class="w-4 h-4 mr-2 text-indigo-500/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ job.location }}
+                </div>
+                <a href="{{ job.job_url }}" target="_blank"
+                    class="mt-auto inline-flex items-center justify-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 rounded-xl transition-all border border-white/5 hover:border-indigo-500/30">
+                    View Details
+                    <svg class="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- No Results -->
+        <div id="no-results"
+            class="hidden text-center py-20 bg-slate-900/30 rounded-3xl border border-dashed border-slate-700">
+            <div class="mb-4 flex justify-center">
+                <svg class="w-16 h-16 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <p class="text-slate-300 text-xl font-bold">No matching jobs found</p>
+            <p class="text-slate-500 mt-2">Try adjusting your filters or search terms.</p>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const refreshText = document.getElementById('refresh-text');
+        const refreshIcon = document.getElementById('refresh-icon');
+        const jobGrid = document.getElementById('job-grid');
+        const noResults = document.getElementById('no-results');
+        const filterChips = document.querySelectorAll('.filter-chip');
+
+        let activeHub = 'all';
+
+        // Combined filter function
+        const applyFilters = () => {
+            const term = searchInput.value.toLowerCase();
+            const cards = document.querySelectorAll('.job-card');
+            let foundCount = 0;
+
+            cards.forEach(card => {
+                const title = card.dataset.title.toLowerCase();
+                const company = card.dataset.company.toLowerCase();
+                const location = card.dataset.location.toLowerCase();
+
+                const matchesSearch = title.includes(term) || company.includes(term);
+                let matchesHub = true;
+
+                if (activeHub !== 'all') {
+                    if (activeHub === 'remote') {
+                        matchesHub = location.includes('remote');
+                    } else if (activeHub === 'gurgaon') {
+                        matchesHub = location.includes('gurgaon') || location.includes('delhi') || location.includes('ncr');
+                    } else {
+                        matchesHub = location.includes(activeHub);
+                    }
+                }
+
+                if (matchesSearch && matchesHub) {
+                    card.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (foundCount === 0 && cards.length > 0) {
+                noResults.classList.remove('hidden');
+                jobGrid.classList.add('hidden');
+            } else {
+                noResults.classList.add('hidden');
+                jobGrid.classList.remove('hidden');
+            }
+        };
+
+        // Search input listener
+        searchInput.addEventListener('input', applyFilters);
+
+        // Filter chip listeners
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Update active state
+                filterChips.forEach(c => {
+                    c.classList.remove('active', 'border-indigo-500', 'bg-indigo-500/10', 'text-indigo-400');
+                    c.classList.add('border-white/5', 'bg-white/5', 'text-slate-400');
+                });
+                chip.classList.add('active', 'border-indigo-500', 'bg-indigo-500/10', 'text-indigo-400');
+                chip.classList.remove('border-white/5', 'bg-white/5', 'text-slate-400');
+
+                activeHub = chip.dataset.hub;
+                applyFilters();
+            });
+        });
+
+        // Refresh trigger
+        refreshBtn.addEventListener('click', async () => {
+            refreshBtn.disabled = true;
+            refreshText.textContent = 'Scanning Boards...';
+            refreshIcon.classList.add('animate-spin');
+
+            try {
+                const response = await fetch('/api/scrape', { method: 'POST' });
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Show a toast or subtle notification instead of alert if possible
+                    alert(`Success: ${result.new_jobs_added} new jobs found!`);
+                    window.location.reload();
+                } else {
+                    alert('Error: ' + (result.error || 'Unknown error occurred'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Connection error - please try again');
+            } finally {
+                refreshBtn.disabled = false;
+                refreshText.textContent = 'Refresh Jobs';
+                refreshIcon.classList.remove('animate-spin');
+            }
+        });
+    </script>
+</body>
+
+</html>
