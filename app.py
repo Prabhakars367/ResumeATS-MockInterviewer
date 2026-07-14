@@ -23,9 +23,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 import socketio
 
-# === custom modules (keep these in your project) ===
-from src import llm        # your LLM helper (llm.py)
-from src import model      # your ATS model (model.py)
+from src import llm        
+from src import model      
 from src.emotion_analyzer import EmotionAnalyzer
 from src.eye_tracking import EyeTracker
 
@@ -41,9 +40,6 @@ except Exception:
     get_ffmpeg_exe = None
 from pydub import AudioSegment
 
-# -----------------------
-# Attempt to import Vosk (optional)
-# -----------------------
 try:
     from vosk import Model as VoskModel, KaldiRecognizer
     import wave as _wave
